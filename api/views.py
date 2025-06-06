@@ -20,14 +20,17 @@ def addItem(request):
         serializer_data.save()
     return Response()
 
-# @api_view(['get'])
-# def getFromUrl(request):
-#     url = "https://api.freeapi.app/api/v1/public/randomusers"
+@api_view(['get'])
+def getFromUrl(request):
+    url = "https://api.freeapi.app/api/v1/public/randomusers"
 
-#     query_params = {
-#         "page": 1,
-#         "limit": 10
-#     }
-#     data = request.get(url)
-
-#     return Response(data)
+    query_params = {
+        "page": 1,
+        "limit": 10
+    }
+    try:
+        response = requests.get(url, params=query_params)
+        data = response.json()
+        return Response(data)
+    except requests.exceptions.RequestException as e:
+        return Response({"error": str(e)}, status=500)
